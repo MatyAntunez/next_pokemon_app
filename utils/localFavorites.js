@@ -12,14 +12,20 @@ const toggleFavorites = (id) => {
 
 
 const existInFavorites = (id) => {
-    if(typeof window === 'undefined') return false;
-    
+    if (typeof window === 'undefined') return false;
+
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
     return favorites.includes(id);
 };
 
+
+const pokemons = () => {
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
+};
+
 export default {
     toggleFavorites,
-    existInFavorites
+    existInFavorites,
+    pokemons
 }
