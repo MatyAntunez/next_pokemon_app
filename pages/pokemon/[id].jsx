@@ -5,6 +5,7 @@ import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import toggleFavorites from "@/utils/localFavorites";
 import { useState } from "react";
 import { localFavorites } from '@/utils'
+import confetti from 'canvas-confetti';
 
 
 const PokemonPage = ({ pokemon }) => {
@@ -19,6 +20,16 @@ const PokemonPage = ({ pokemon }) => {
     localFavorites.toggleFavorites(pokemon.id)
     setIsInFavorites(!isInFavorites)
 
+
+    if (!isInFavorites) {
+      confetti({
+        zIndex: 999,
+        particleCount: 100,
+        spread: 160,
+        angle: -100,
+        origin: { x: 1, y: 0 }
+      });
+    }
   };
 
   return (
@@ -103,9 +114,14 @@ export const getStaticProps = async ({ params }) => {
   const { data } = await pokeApi.get(`/pokemon/${id}`)
   //https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg
 
+  const pokemon = {
+    id: data.id,
+    name: data.name,
+    sprites: data.sprites
+  };
   return {
     props: {
-      pokemon: data
+      pokemon
     }
   }
 };
