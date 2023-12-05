@@ -103,7 +103,8 @@ export const getStaticPaths = async (ctx) => {
     paths: pokemon151.map((id) => ({
       params: { id }
     })),
-    fallback: false
+    //fallback: false //  este es para que muestre 404 cuando no hay mas generados
+     fallback: 'blocking'
   }
 };
 
@@ -114,6 +115,15 @@ export const getStaticProps = async ({ params }) => {
   const { data } = await pokeApi.get(`/pokemon/${id}`)
   //https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg
 
+  if(!data){
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
   const pokemon = {
     id: data.id,
     name: data.name,
@@ -122,7 +132,8 @@ export const getStaticProps = async ({ params }) => {
   return {
     props: {
       pokemon
-    }
+    },
+    revalidate: 86400 //60 * 60 * 24,
   }
 };
 
